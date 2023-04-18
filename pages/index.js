@@ -1,9 +1,21 @@
+import { useState } from "react";
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import { PostCard, Categories, PostWidget } from "@/components";
 import { getPosts } from "@/services";
 
 export default function Home({ posts }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 2;
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const endIndex = currentPage * postsPerPage;
+  const visiblePosts = posts.slice(startIndex, endIndex);
+
   return (
     <div className="container mx-auto px-10 mb-8">
       <Head>
@@ -15,9 +27,36 @@ export default function Home({ posts }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-8 col-span-1">
-          {posts.map((post, index) => (
+          {visiblePosts.map((post, index) => (
             <PostCard post={post.node} key={post.title} />
           ))}
+          <div className="flex justify-center mt-4">
+            <button
+              className="mr-2"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </button>
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                className={`mx-1 px-3 py-1 rounded-full ${
+                  currentPage === index + 1 ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="ml-2"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Siguiente
+            </button>
+          </div>
         </div>
         <div className="lg:col-span-4 col-span-1">
           <div className="lg:sticky relative top-8">
