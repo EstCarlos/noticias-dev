@@ -9,16 +9,16 @@ import {
   Author,
   Comments,
   CommentsForm,
-  Loader
+  Loader,
 } from "../../components";
 
 const PostDetails = ({ post }) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Loader />
+    return <Loader />;
   }
-  
+
   return (
     <div className="continer mx-auto px-10 mb-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -57,6 +57,6 @@ export async function getStaticPaths() {
 
   return {
     paths: posts.map(({ node: { slug } }) => ({ params: { slug } })),
-    fallback: true,
+    fallback: false,
   };
 }

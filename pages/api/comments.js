@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from "graphql-request";
 
-const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPINT;
+const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 const graphcmsToken = process.env.GRAPHCMS_TOKEN;
 
 export default async function comments(req, res) {
@@ -30,7 +30,12 @@ export default async function comments(req, res) {
     }
   `;
   try {
-    const result = await graphQlClient.request(query, req.body);
+    const result = await graphQlClient.request(query, {
+      name: req.body.name,
+      email: req.body.email,
+      comment: req.body.comment,
+      slug: req.body.slug,
+    });
     return res.status(200).send(result);
   } catch (error) {
     console.log(error);
