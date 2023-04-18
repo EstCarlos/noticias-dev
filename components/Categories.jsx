@@ -7,7 +7,7 @@ const Categories = () => {
 
   useEffect(() => {
     getCategories().then((newCategories) => setCategories(newCategories));
-  }, [categories]);
+  }, []);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 mb-8 pb-12">
